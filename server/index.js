@@ -10,6 +10,7 @@ dotenv.config();
 const geocodeRoute = require('./routes/geocode');
 const footprintRoute = require('./routes/footprint');
 const areaRoute = require('./routes/area');
+const configRoute = require('./routes/config');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -43,6 +44,7 @@ app.get('/health', (req, res) => {
 app.use('/api/geocode', geocodeRoute);
 app.use('/api/footprint', footprintRoute);
 app.use('/api/area', areaRoute);
+app.use('/api/config', configRoute);
 
 // Serve React app for all non-API routes in production
 if (process.env.NODE_ENV === 'production') {

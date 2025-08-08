@@ -15,12 +15,11 @@ import {
   RulerIcon 
 } from './components/Icons';
 
-// Mapbox public token from environment
-const MAPBOX_TOKEN = process.env.REACT_APP_MAPBOX_TOKEN;
-
 function App() {
   const [address, setAddress] = useState('');
   const [isGeocoding, setIsGeocoding] = useState(false);
+  const [mapboxToken, setMapboxToken] = useState(null);
+  const [configLoading, setConfigLoading] = useState(true);
   const [viewState, setViewState] = useState({
     longitude: -122.1430,
     latitude: 37.4419,
@@ -32,6 +31,22 @@ function App() {
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 640);
+
+  // Load configuration on app start
+  React.useEffect(() => {
+    const loadConfig = async () => {
+      try {
+        const response = await axios.get('/api/config');
+        setMapboxToken(response.data.config.mapboxToken);
+      } catch (error) {
+        console.error('Failed to load config:', error);
+        setError('Failed to load application configuration');
+      } finally {
+        setConfigLoading(false);
+      }
+    };
+    loadConfig();
+  }, []);
 
   // Handle window resize
   React.useEffect(() => {
@@ -138,7 +153,57 @@ function App() {
   };
 
   // Debug token
-  console.log('MAPBOX_TOKEN:', MAPBOX_TOKEN ? 'Loaded' : 'Missing');
+  console.log('MAPBOX_TOKEN:', mapboxToken ? 'Loaded' : 'Missing');
+
+  // Show loading screen while config loads
+  if (configLoading) {
+    return (
+      <div style={{ 
+        height: '100vh', 
+        display: 'flex', 
+        alignItems: 'center', 
+        justifyContent: 'center',
+        backgroundColor: '#f8fafc'
+      }}>
+        <div style={{ textAlign: 'center' }}>
+          <LoadingIcon size={32} color="#3b82f6" className="animate-spin" />
+          <div style={{ marginTop: '16px', fontSize: '16px', color: '#64748b' }}>
+            Loading RoofScope...
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Show error if no token available
+  if (!mapboxToken) {
+    return (
+      <div style={{ 
+        height: '100vh', 
+        display: 'flex', 
+        alignItems: 'center', 
+        justifyContent: 'center',
+        backgroundColor: '#f8fafc'
+      }}>
+        <div style={{ 
+          textAlign: 'center',
+          padding: '32px',
+          backgroundColor: 'white',
+          borderRadius: '8px',
+          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+          maxWidth: '400px'
+        }}>
+          <WarningIcon size={48} color="#dc2626" />
+          <h2 style={{ fontSize: '18px', fontWeight: '600', color: '#dc2626', margin: '16px 0 8px 0' }}>
+            Configuration Error
+          </h2>
+          <p style={{ fontSize: '14px', color: '#64748b', margin: '0' }}>
+            Mapbox token is not configured. Please check your environment variables.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div style={{ 
@@ -272,7 +337,7 @@ function App() {
             {...viewState}
             onMove={evt => setViewState(evt.viewState)}
             onClick={handleMapClick}
-            mapboxAccessToken={MAPBOX_TOKEN}
+            mapboxAccessToken={mapboxToken}
             style={{ width: '100%', height: '100%' }}
             mapStyle="mapbox://styles/mapbox/satellite-v9"
             cursor="crosshair"
