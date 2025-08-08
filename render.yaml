@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: roofscope
+    runtime: node
+    plan: free
+    buildCommand: npm run build
+    startCommand: npm start
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: MAPBOX_SECRET_TOKEN
+        sync: false
+      - key: MAPBOX_PUBLIC_TOKEN
+        sync: false
+      - key: OVERPASS_API_URL
+        value: https://overpass-api.de/api/interpreter

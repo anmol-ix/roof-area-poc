@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
+const path = require('path');
 
 // Load environment variables
 dotenv.config();
@@ -17,6 +18,11 @@ const PORT = process.env.PORT || 3001;
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Serve static files from React build in production
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, 'public')));
+}
 
 // Request logging middleware
 app.use((req, res, next) => {
@@ -37,6 +43,13 @@ app.get('/health', (req, res) => {
 app.use('/api/geocode', geocodeRoute);
 app.use('/api/footprint', footprintRoute);
 app.use('/api/area', areaRoute);
+
+// Serve React app for all non-API routes in production
+if (process.env.NODE_ENV === 'production') {
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  });
+}
 
 // Error handling middleware
 app.use((error, req, res, next) => {
