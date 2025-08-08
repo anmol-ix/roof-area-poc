@@ -1,27 +1,50 @@
-# Roof Area Calculator POC
+# RoofScope - AI-Powered Roof Area Calculator
 
-A proof-of-concept web application that calculates building roof areas from satellite imagery using Mapbox and building footprint data.
+A professional enterprise-grade web application that calculates building roof areas from satellite imagery using Mapbox and geospatial analysis.
 
-## Features
+## ✨ Features
 
-- 🗺️ **Address Geocoding**: Enter a U.S. street address to find coordinates
-- 🛰️ **High-res Satellite Maps**: Mapbox satellite tiles at zoom levels 19-20
-- 📍 **Interactive Pin Dropping**: Click to drop pins on buildings
-- 🏠 **Building Footprint Lookup**: Query Microsoft Building Footprints + OpenStreetMap fallback
-- 📐 **Accurate Area Calculation**: UTM projection with ±1m² accuracy using Turf.js
+### 🏢 **Professional Enterprise UI**
+- **Dark Header Design**: Professional navy header with embedded search
+- **Right Sidebar Layout**: Clean 280px data panel with organized metrics
+- **SVG Icon System**: Professional icons replacing all emoji elements
+- **Responsive Design**: Mobile drawer + desktop sidebar layouts
+- **Inter Font**: Professional typography with proper hierarchy
 
-## Architecture
+### 🗺️ **Advanced Mapping**
+- **Address Geocoding**: Enter U.S. street addresses with smart zoom (level 17)
+- **High-res Satellite Maps**: Mapbox satellite imagery with crosshair precision
+- **Interactive Pin Dropping**: Professional red markers with white borders
+- **Building Visualization**: Clean polygon outlines with subtle fill
+
+### 📊 **Accurate Analysis**
+- **Building Footprint Lookup**: Microsoft Building Footprints + OpenStreetMap fallback
+- **Precise Area Calculation**: UTM projection with ±1m² accuracy using Turf.js
+- **Data Presentation**: Source tracking, calculation method, and precision metrics
+- **Real-time Results**: Instant analysis with professional loading states
+
+## 🏗️ Architecture
 
 ```
-┌─────────────────┐    ┌──────────────────┐    ┌─────────────────┐
-│  React Frontend │────│  Express Backend │────│  External APIs  │
-│                 │    │                  │    │                 │
-│ • Address Input │    │ • /api/geocode   │    │ • Mapbox API    │
-│ • Mapbox GL Map │    │ • /api/footprint │    │ • Microsoft     │
-│ • Pin Dropping  │    │ • /api/area      │    │ • OpenStreetMap │
-│ • Area Display  │    │                  │    │                 │
-└─────────────────┘    └──────────────────┘    └─────────────────┘
+┌─────────────────────────────────────┐    ┌──────────────────┐    ┌─────────────────┐
+│           React Frontend            │────│  Express Backend │────│  External APIs  │
+│                                     │    │                  │    │                 │
+│ • Professional Header + Search      │    │ • /api/geocode   │    │ • Mapbox API    │
+│ • Mapbox GL Satellite Map          │    │ • /api/footprint │    │ • Microsoft     │
+│ • SVG Icon System                  │    │ • /api/area      │    │ • OpenStreetMap │
+│ • Right Sidebar Analytics          │    │                  │    │                 │
+│ • Mobile Responsive Drawer         │    │                  │    │                 │
+│ • Tailwind CSS + Inter Font        │    │                  │    │                 │
+└─────────────────────────────────────┘    └──────────────────┘    └─────────────────┘
 ```
+
+### 🎨 **UI Components**
+- **Header**: Dark navy with logo, search bar, and Mapbox attribution
+- **Map**: Full-screen satellite view with professional crosshair cursor
+- **Sidebar**: 280px right panel with building analytics and data
+- **Mobile**: Bottom drawer that slides up with key information
+- **Icons**: Custom SVG icon system (Building, Analytics, Location, etc.)
+- **Loading**: Professional spinners and overlay states
 
 ## Quick Start
 
@@ -35,7 +58,7 @@ A proof-of-concept web application that calculates building roof areas from sate
 
 1. **Clone and install dependencies:**
    ```bash
-   git clone <your-repo>
+   git clone https://github.com/anmol-ix/roof-area-poc.git
    cd roof-area-poc
    
    # Install server dependencies
@@ -48,13 +71,23 @@ A proof-of-concept web application that calculates building roof areas from sate
    ```
 
 2. **Configure environment variables:**
-   ```bash
-   # Copy the example file
-   cp server/.env.example server/.env
    
-   # Edit server/.env with your actual tokens:
+   **Server Environment** (`server/.env`):
+   ```bash
+   cp server/.env.example server/.env
+   # Edit with your tokens:
    MAPBOX_SECRET_TOKEN=sk.your_secret_token_here
    MAPBOX_PUBLIC_TOKEN=pk.your_public_token_here
+   MICROSOFT_API_URL=https://planetarycomputer.microsoft.com/api/stac/v1/search
+   OVERPASS_API_URL=https://overpass-api.de/api/interpreter
+   PORT=3001
+   ```
+   
+   **Client Environment** (`client/.env`):
+   ```bash
+   cp client/.env.example client/.env
+   # Edit with your public token:
+   REACT_APP_MAPBOX_TOKEN=pk.your_public_token_here
    ```
 
 3. **Get Mapbox API tokens:**
@@ -117,8 +150,11 @@ curl "http://localhost:3001/api/area?geojson={...geojson polygon...}"
 
 ### Frontend  
 - **react** - UI framework
-- **react-map-gl** - Mapbox GL JS React wrapper
+- **react-map-gl@7.1.9** - Mapbox GL JS React wrapper
+- **mapbox-gl** - Mapbox GL JS peer dependency
 - **axios** - HTTP client for API calls
+- **tailwindcss@3** - Professional utility-first CSS framework
+- **Inter font** - Modern professional typography
 
 ## Data Sources
 
